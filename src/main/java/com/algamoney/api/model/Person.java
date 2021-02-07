@@ -1,6 +1,7 @@
 package com.algamoney.api.model;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,8 +16,8 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "category")
-public class Category {
+@Table(name = "person")
+public class Person {
 
 	@EqualsAndHashCode.Include
 	@Id
@@ -24,7 +25,14 @@ public class Category {
 	private Long id;
 	
 	@NotNull
-	@Size(min = 3, max = 50)
+	@Size(min = 2, max = 50)
 	@Column(length = 50)
 	private String name;
+	
+	@Embedded
+	private Address address; 
+	
+	@Column
+	private boolean active;
+
 }
