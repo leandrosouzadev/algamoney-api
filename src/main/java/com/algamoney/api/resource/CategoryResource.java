@@ -2,6 +2,7 @@ package com.algamoney.api.resource;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -42,7 +43,8 @@ public class CategoryResource {
 	}
 	
 	@GetMapping("/{id}")
-	public Category findById(@PathVariable Long id) {
-		return categoryRespository.findById(id).orElse(null);
+	public ResponseEntity<Category> findById(@PathVariable Long id) {
+		Optional<Category> category = categoryRespository.findById(id);		
+		return category.isPresent() ? ResponseEntity.ok(category.get()) : ResponseEntity.notFound().build();
 	}
 }
