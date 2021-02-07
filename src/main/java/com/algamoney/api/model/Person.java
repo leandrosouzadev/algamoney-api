@@ -32,7 +32,8 @@ public class Person {
 	@Embedded
 	private Address address; 
 	
+	@NotNull
 	@Column
-	private boolean active;
+	private Boolean active;
 
 }
