@@ -67,5 +67,4 @@ public class PersonResource {
 	public void updateActiveProperty(@PathVariable Long id, @RequestBody Boolean active) {
 		personService.updateActiveProperty(id, active);
 	}
-
 }
