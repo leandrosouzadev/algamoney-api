@@ -26,7 +26,7 @@ public class PersonService {
 		personRepository.save(savedPerson);
 	}
 	
-	private Person findOrFail(Long id) {		
+	public Person findOrFail(Long id) {		
 		return personRepository.findById(id).orElseThrow(() -> new EmptyResultDataAccessException(1));
 	}
 

@@ -76,6 +76,12 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-java8</artifactId>
 		</dependency>
+		
+		<!-- Hibernate meta model-->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-jpamodelgen</artifactId>
+		</dependency>
 
 		<!-- Java 8 dates -->
 		<dependency>
