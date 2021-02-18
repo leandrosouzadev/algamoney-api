@@ -11,6 +11,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
 import com.algamoney.api.model.AccountingEntry;
@@ -23,7 +26,7 @@ public class AccountingEntryRepositoryImpl implements AccountingEntryRepositoryQ
 	private EntityManager entityManager;
 
 	@Override
-	public List<AccountingEntry> findByFilter(AccountingEntryFilter accountingEntryFilter) {
+	public Page<AccountingEntry> findByFilter(AccountingEntryFilter accountingEntryFilter, Pageable pageable) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<AccountingEntry> criteriaQuery = criteriaBuilder.createQuery(AccountingEntry.class);
 		Root<AccountingEntry> root = criteriaQuery.from(AccountingEntry.class);
@@ -32,8 +35,12 @@ public class AccountingEntryRepositoryImpl implements AccountingEntryRepositoryQ
 		criteriaQuery.where(predicates);
 
 		TypedQuery<AccountingEntry> typedQuery = entityManager.createQuery(criteriaQuery);
-		return typedQuery.getResultList();
+		
+		addPagingRestrictions(typedQuery, pageable);
+		
+		return new PageImpl<>(typedQuery.getResultList(), pageable, total(accountingEntryFilter));
 	}
+
 
 	private Predicate[] createRestrictions(AccountingEntryFilter accountingEntryFilter, CriteriaBuilder criteriaBuilder,
 			Root<AccountingEntry> root) {
@@ -58,4 +65,24 @@ public class AccountingEntryRepositoryImpl implements AccountingEntryRepositoryQ
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}
 
+	private void addPagingRestrictions(TypedQuery<AccountingEntry> typedQuery, Pageable pageable) {
+		int currentPage = pageable.getPageNumber();
+		int maxResult = pageable.getPageSize();
+		int startPosition = currentPage * maxResult;
+		
+		typedQuery.setFirstResult(startPosition);
+		typedQuery.setMaxResults(maxResult);		
+	}
+	
+	private Long total(AccountingEntryFilter accountingEntryFilter) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+		Root<AccountingEntry> root = criteriaQuery.from(AccountingEntry.class);
+		
+		Predicate[] predicates = createRestrictions(accountingEntryFilter, criteriaBuilder, root);
+		criteriaQuery.where(predicates);
+		
+		criteriaQuery.select(criteriaBuilder.count(root));
+		return entityManager.createQuery(criteriaQuery).getSingleResult();
+	}
 }
