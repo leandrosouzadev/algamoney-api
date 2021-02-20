@@ -76,8 +76,8 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-java8</artifactId>
 		</dependency>
-		
-		<!-- Hibernate meta model-->
+
+		<!-- Hibernate meta model -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-jpamodelgen</artifactId>
@@ -93,6 +93,12 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
+		</dependency>
+
+		<!-- security -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 
 	</dependencies>
